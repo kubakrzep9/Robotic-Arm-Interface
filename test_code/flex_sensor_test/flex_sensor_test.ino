@@ -1,3 +1,6 @@
+// Test program for functionality of flex sensors
+
+
 int flex_pin = A0;
 int flex_value = 0;
 int servo_position = 0;
