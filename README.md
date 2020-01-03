@@ -9,6 +9,7 @@ Ex: "instrID 1 2 3".
 
 <h3> List of Instructions </h3>
 <h4> Interface to Robotic Arm or Position System Instructions </h4>
+
 - Set Robot Pins:    "servoPins 13 12 11 10 9 8"
 - Set Robot Angles:  "servoAngles 90 90 0 90 135 45" 
 - Set Sensor Pins:   "sensorPins 13 12 11"
@@ -16,7 +17,11 @@ Ex: "instrID 1 2 3".
   - Requests current servo pins and angles.
 - Get Sensor State:  "sensorState"
   - Requests current sensor pins and values.
-  
+
+<h4> Robotic Arm to Interface Instructions </h4>
+
+
+
 <h3> Robotic Arm </h3>
 The Arm is a 6 servo system that gives the Arm 360 degrees of control within it's reach. The Arm is exactly like a human arm where it has a body, shoulder, elbow, wrist, hand and hand rotator servos. The Arms servo angle measures and pins can be set. 
 
