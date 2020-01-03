@@ -4,7 +4,8 @@ Project Abstract
 The Robotic Arm Interface is a program to control a six servo Robotic Arm. To control the Arm three systems work together. The Arm uses an Arduino to control the servos. The Positioning System uses another Arduino to model an individuals arm using gyroscopic accelerometers. The GUI communicates with the Robotic Arm and the Positioning System via serial communication by sending and receiving instructions. 
 
 Communication
-Serial communication is used in this interface. Each of the three systems contains an instruction interpreter that will decode serial input to determine whether an instruction was sent or not. An instruction is an instructionID followed by data members all seperated by spaces. The instructionID determines what the interpreter should do. Ex: "instrID 1 2 3 4 5 6". 
+Serial communication is used in this interface. Each of the three systems contains an instruction interpreter that will decode serial input to determine whether an instruction was sent or not. An instruction is an instructionID followed by data members all seperated by spaces. The instructionID determines what the interpreter should do. 
+Ex: "instrID 1 2 3 4 5 6". 
 
 List of Instructions
 - Set Robot Pins:    "servoPins 13 12 11 10 9 8"
