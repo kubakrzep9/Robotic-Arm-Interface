@@ -8,7 +8,7 @@ Serial communication is used in this interface. Each of the three systems contai
 Ex: "instrID 1 2 3". 
 
 <h3> List of Instructions </h3>
-
+<h4> Interface to Robotic Arm or Position System Instructions </h4>
 - Set Robot Pins:    "servoPins 13 12 11 10 9 8"
 - Set Robot Angles:  "servoAngles 90 90 0 90 135 45" 
 - Set Sensor Pins:   "sensorPins 13 12 11"
