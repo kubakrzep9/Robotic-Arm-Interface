@@ -16,7 +16,7 @@ The Position System uses three MPU6050 gyroscopic accelerometer sensors and an e
 Serial communication is used to pass instructions back and forth between the systems. Each system has an instruction interpreter that will decode any serial input received. If the input is a valid instruction it will execute an action based upon the instructionID. An instruction is made up of an instructionID followed by data values seperated by spaces. Ex: "instrID 1 2 3". The instruction intepreter parses the serial input by attempting to extract the instructionID and data members. If successful, the instrucion will be executed. Many instructions (such as servoAngles) will repeat between systems however, different systems will execute the instructions differently. When the Interface sends the servoAngles instruction it is setting the Arms servo angles. When the Robotic Arm sends the servoAngles instruction (after receiving the armState instruction) it is updating the Interface with the current angle values.  
 
 <h4> Interface to Robotic Arm or Position System Instructions </h4>
-
+<p>
 - Set Robot Pins:    "servoPins 13 12 11 10 9 8"          
    - "servoPins bodyPin shoulderPin elbowPin wristPin handRotPin handPin"
 - Set Robot Angles:  "servoAngles 90 90 0 90 135 45"      
@@ -36,3 +36,4 @@ Serial communication is used to pass instructions back and forth between the sys
 - Send Sensor Pins "sensorPins 13 12 11 10"               Caused by sensorState instruction
 - Send Sensor Values "sensorValues 0 1 2 3 4 5 6 7 8 9"   Sent on an interval to update Interface with current values. 
    - "SensorValues g1_pitch g1_roll g1_yaw g2_pitch g2_roll g2_yaw g3_pitch g3_roll g3_yaw emg_value"
+ </p>
