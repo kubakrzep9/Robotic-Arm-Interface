@@ -15,7 +15,7 @@ The Position System uses three MPU6050 gyroscopic accelerometer sensors and an e
 <h3> Communication </h3>
 Serial communication is used to pass instructions back and forth between the systems. Each system has an instruction interpreter that will decode any serial input received. If the input is a valid instruction it will execute an action based upon the instructionID. An instruction is made up of an instructionID followed by data values seperated by spaces. Ex: "instrID 1 2 3". The instruction intepreter parses the serial input by attempting to extract the instructionID and data members. If successful, the instrucion will be executed. Many instructions (such as servoAngles) will repeat between systems however, different systems will execute the instructions differently. When the Interface sends the servoAngles instruction it is setting the Arms servo angles. When the Robotic Arm sends the servoAngles instruction (after receiving the armState instruction) it is updating the Interface with the current angle values.  
 
-<h4> Interface to Robotic Arm or Position System Instructions </h4>
+<h4> Instructions from Interface to Robotic Arm or Position System </h4>
 
 - Set Robot Pins:    "servoPins 13 12 11 10 9 8"          
    - "servoPins bodyPin shoulderPin elbowPin wristPin handRotPin handPin"
@@ -26,12 +26,12 @@ Serial communication is used to pass instructions back and forth between the sys
 - Get Arm State:     "armState"                           Requests current servo pins and angles.
 - Get Sensor State:  "sensorState"                        Requests current sensor pins and values.
 
-<h4> Robotic Arm to Interface Instructions </h4>
+<h4> Instructions from Robotic Arm to Interface </h4>
 
 - Send Robot Pins    "servoPins 13 12 11 10 9 8"          Caused by armState instruction.
 - Send Robot Angles  "servoAngles 90 90 0 90 135 45"      Caused by armState instruction.
 
-<h4> Position System to Interface Instructions </h4>
+<h4> Instructions from Position System to Interface </h4>
 
 - Send Sensor Pins "sensorPins 13 12 11 10"               Caused by sensorState instruction
 - Send Sensor Values "sensorValues 0 1 2 3 4 5 6 7 8 9"   Sent on an interval to update Interface with current values. 
