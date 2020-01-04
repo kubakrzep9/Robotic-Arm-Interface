@@ -40,7 +40,8 @@ Serial communication is used to pass instructions back and forth between the sys
 - Send Sensor Pins: "sensorPins gyro1 gyro2 gyro3 emg"
    - Caused by sensorState instruction. 
    - Ex: "sensorPins 13 12 11 10"
-- Send Sensor Values: "SensorValues g1_pitch g1_roll g1_yaw g2_pitch g2_roll g2_yaw g3_pitch g3_roll g3_yaw emg_value"   
+- Send Sensor Values: 
+     "SensorValues g1_pitch g1_roll g1_yaw g2_pitch g2_roll g2_yaw g3_pitch g3_roll g3_yaw emg_value"   
    - Caused by sensorState instruction and sent on an interval to update Interface with current values. 
    - Ex: "sensorValues 0 1 2 3 4 5 6 7 8 9"  
   
