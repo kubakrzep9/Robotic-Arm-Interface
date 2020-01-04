@@ -17,22 +17,30 @@ Serial communication is used to pass instructions back and forth between the sys
 
 <h4> Instructions from Interface to Robotic Arm or Position System </h4>
 
-- Set Robot Pins:    "servoPins 13 12 11 10 9 8"          
-   - "servoPins bodyPin shoulderPin elbowPin wristPin handRotPin handPin"
-- Set Robot Angles:  "servoAngles 90 90 0 90 135 45"      
-   - "servoAngles bAngle sAngle eAngle wAngle hrAngle hAngle"
-- Set Sensor Pins:   "sensorPins 13 12 11 10"             
-   - "sensorPins gyro1 gyro2 gyro3 emg"
+- Set Robot Pins: "servoPins bodyPin shoulderPin elbowPin wristPin handRotPin handPin"             
+   - Ex: "servoPins 13 12 11 10 9 8"  
+- Set Robot Angles: "servoAngles bAngle sAngle eAngle wAngle hrAngle hAngle"
+   - Ex: "servoAngles 90 90 0 90 135 45"
+- Set Sensor Pins: "sensorPins gyro1 gyro2 gyro3 emg"               
+   - Ex: "sensorPins 13 12 11 10"
 - Get Arm State:     "armState"                           Requests current servo pins and angles.
 - Get Sensor State:  "sensorState"                        Requests current sensor pins and values.
 
 <h4> Instructions from Robotic Arm to Interface </h4>
 
-- Send Robot Pins    "servoPins 13 12 11 10 9 8"          Caused by armState instruction.
-- Send Robot Angles  "servoAngles 90 90 0 90 135 45"      Caused by armState instruction.
+- Send Robot Pins: "servoPins bodyPin shoulderPin elbowPin wristPin handRotPin handPin"              
+   - Caused by armState instruction. 
+   - Ex: "servoPins 13 12 11 10 9 8"
+- Send Robot Angles: "servoAngles bAngle sAngle eAngle wAngle hrAngle hAngle"       
+   - Caused by armState instruction. 
+   - Ex: "servoAngles 90 90 0 90 135 45"
 
 <h4> Instructions from Position System to Interface </h4>
 
-- Send Sensor Pins "sensorPins 13 12 11 10"               Caused by sensorState instruction
-- Send Sensor Values "sensorValues 0 1 2 3 4 5 6 7 8 9"   Sent on an interval to update Interface with current values. 
-   - "SensorValues g1_pitch g1_roll g1_yaw g2_pitch g2_roll g2_yaw g3_pitch g3_roll g3_yaw emg_value"
+- Send Sensor Pins: "sensorPins gyro1 gyro2 gyro3 emg"
+   - Caused by sensorState instruction. 
+   - Ex: "sensorPins 13 12 11 10"
+- Send Sensor Values: "SensorValues g1_pitch g1_roll g1_yaw g2_pitch g2_roll g2_yaw g3_pitch g3_roll g3_yaw emg_value"   
+   - Caused by sensorState instruction and sent on an interval to update Interface with current values. 
+   - Ex: "sensorValues 0 1 2 3 4 5 6 7 8 9"  
+  
