@@ -6,7 +6,7 @@ class GUI_Settings{
   private int MAX_WIDTH = 1000;
   private int MAX_HEIGHT = 1000;
   private int GUI_WIDTH  = 700;
-  private int GUI_HEIGHT = 290;
+  private int GUI_HEIGHT = 310;
   
   private boolean auto_mode = false;
   private boolean options_mode = false;
@@ -46,47 +46,58 @@ class GUI_Settings{
     /**************************************************************************************/
     
     // Posiiton sensor names and values
-    int margin   = 25;
     int header_y = 25;
     int sensor_x = 20;
-    int sensor_y = 60;
+    int sensor_y = 50;
     String sensor_names[] = position_system.getSensorNames();
-    int sensor_values[] = position_system.getSensorValues();
-    int size = sensor_names.length;
+    String value_names[]  = position_system.getGyroAngleNames();
+    int sensor_values[]   = position_system.getSensorValues(); // first 9 are gyros 10 is emg
+    int num_MPU6050  = position_system.num_MPU6050;
+    int num_angles   = value_names.length;
+    int name_indent  = 20;
+    int value_indent = name_indent+50;
+    
+    int i = 0;
     display_text("POSITION SENSORS", 75, header_y, CENTER, fonts.get(heading_font));
-    for(int i=0; i<size; i++){ 
-      display_text(sensor_names[i], sensor_x, sensor_y+margin*(i), LEFT, fonts.get(text_font)); // sensor names
-      display_text(/*format_int_data(sensor_values[i])*/sensor_values[i], sensor_x+margin*2, sensor_y+margin*(i), LEFT, fonts.get(text_font)); // sensor values
+    for(; i<num_MPU6050; i++){ 
+      sensor_y = 50+(i*70);
+      display_text(sensor_names[i],    sensor_x,    sensor_y, LEFT, fonts.get(text_font)); // sensor names
+      for(int j=0; j<num_angles; j++){
+        display_text(value_names[j],   sensor_x+name_indent, sensor_y+17*(j+1), LEFT, fonts.get(text_font)); // angle names   
+        display_text(sensor_values[i], sensor_x+value_indent, sensor_y+17*(j+1), LEFT, fonts.get(text_font)); // sensor values
+      }
     }
+    
+    int emg_y = 275;
+    display_text(sensor_names[i],  sensor_x,              emg_y, LEFT, fonts.get(text_font)); // sensor names
+    display_text(sensor_values[i], sensor_x+value_indent, emg_y, LEFT, fonts.get(text_font)); // sensor values
 
     // Robotic arm servo names and values
+    int margin = 25;
     int servo_x = 145;
+    int servo_y = 50;
     String[] servo_names  = robot.getServoNames();
     int[]    servo_angles = robot.getServoAngles();
     
-    size = Robot.num_servos;
+    int num_servos = Robot.num_servos;
     display_text("ROBOTIC ARM", 200, header_y, CENTER, fonts.get(heading_font));
-    for(int i=0; i<size; i++){
-      display_text(servo_names[i], servo_x+15, sensor_y+margin*(i), LEFT, fonts.get(text_font)); // servo names
-      display_text(/*format_int_data(servo_angles[i])*/servo_angles[i], servo_x+90, sensor_y+margin*(i), LEFT, fonts.get(text_font)); // servo values
+    for(i=0; i<num_servos; i++){
+      display_text(servo_names[i],  servo_x+15, servo_y+margin*(i), LEFT, fonts.get(text_font)); // servo names
+      display_text(servo_angles[i], servo_x+90, servo_y+margin*(i), LEFT, fonts.get(text_font)); // servo values
     }
     
     // White mode box and text
     int mode_x = 395;
-    int mode_y = 268;
+    int mode_y = 290;
     stroke(255, 255, 255);
     fill(255, 255, 255);   
-    rect(320, 255, 145, 15); // x, y, w, h
+    rect(320, 280, 145, 15); // x, y, w, h
     if(auto_mode){ display_text("MODE: AUTO ", mode_x, mode_y, CENTER, fonts.get(text_font)); }
-    else{ display_text("MODE: MANUAL", mode_x, mode_y, CENTER, fonts.get(text_font)); }
+    else{          display_text("MODE: MANUAL", mode_x, mode_y, CENTER, fonts.get(text_font)); }
     
     // Options menu
     if(options_mode){
-      int options_x = 335;
-      int options_y = 115; 
-      int gap = 100;
-      
-      size = sensor_names.length; // 3 sensors --> (6 servos)/(2 columns). 
+      int options_y = 115;    
 
       /************************************************************************************************/
       /*** Options Menu - "One time settings". Should only need to set values in options menu once. ***/
@@ -94,25 +105,29 @@ class GUI_Settings{
       
       int header_x = 500;
       display_text("PORT SELECTION", header_x, header_y, CENTER, fonts.get(heading_font));
-      display_text("PIN SELECTION", header_x, 90, CENTER, fonts.get(heading_font));
+      display_text("PIN SELECTION",  header_x, 90,       CENTER, fonts.get(heading_font));
       
-      display_text("POSITION SENSORS",   /*380*/410, header_y+20, CENTER, fonts.get(text_font));
-      display_text("ROBOTIC ARM",   /*620*/590, header_y+20, CENTER, fonts.get(text_font));
+      display_text("POSITION SENSORS",   590, header_y+20, CENTER, fonts.get(text_font));
+      display_text("ROBOTIC ARM",        410, header_y+20, CENTER, fonts.get(text_font));
 
-      int space = 40; 
-      int gap_between_servo_pins = 130;
-      int servo_pin_x = 490; 
+      int sensor_pin_x = 580;
+      int servo_pin_x = 320; 
       int[] sensor_pins = position_system.getSensorPins();
       int[] servo_pins  = robot.getServoPins();
+      int num_sensors = sensor_names.length;
+      int servo_iterations = num_servos/2; // 2 columns of 3 pins
+      
+      for(i=0; i<num_sensors; i++){
+        display_text(sensor_names[i],  sensor_pin_x,      options_y+margin*(i), LEFT, fonts.get(text_font)); // sensor names 
+        display_text(sensor_pins[i],   sensor_pin_x+55,   options_y+margin*(i), LEFT, fonts.get(text_font)); // sensor pins
+      }
     
       // Iterates 3 times, placing essentially 3 columns of text
-      for(int i=0; i<size; i++){
-        display_text(sensor_names[i], options_x, options_y+margin*(i), LEFT, fonts.get(text_font));                                                              // sensor names 
-        display_text(/*format_int_data(sensor_pins[i])*/sensor_pins[i], options_x+space, options_y+margin*(i), LEFT, fonts.get(text_font));                      // sensor pins
-        display_text(servo_names[i], options_x+gap, options_y+margin*(i), LEFT, fonts.get(text_font));                                                           // servo names
-        display_text(/*format_int_data(servo_pins[i])*/servo_pins[i], servo_pin_x, options_y+margin*(i), LEFT, fonts.get(text_font));                            // servo pins
-        display_text(servo_names[i+3], options_x+2*gap+20, options_y+margin*(i), LEFT, fonts.get(text_font));                                                    // servo names
-        display_text(/*format_int_data(servo_pins[i+3])*/servo_pins[i+3], servo_pin_x+gap_between_servo_pins, options_y+margin*(i), LEFT, fonts.get(text_font)); // servo pins       
+      for(i=0; i<servo_iterations; i++){
+        display_text(servo_names[i],   servo_pin_x,       options_y+margin*(i), LEFT, fonts.get(text_font)); // servo names
+        display_text(servo_pins[i],    servo_pin_x+65,    options_y+margin*(i), LEFT, fonts.get(text_font)); // servo pins
+        display_text(servo_names[i+3], servo_pin_x + 120, options_y+margin*(i), LEFT, fonts.get(text_font)); // servo names
+        display_text(servo_pins[i+3],  servo_pin_x+ 190,  options_y+margin*(i), LEFT, fonts.get(text_font)); // servo pins
       }
     }    
   }

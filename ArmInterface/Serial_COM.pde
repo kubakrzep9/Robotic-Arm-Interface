@@ -88,8 +88,8 @@ class Serial_COM{
       myport.connection = new Serial(parent, port_connection_name, 9600); 
       status = port_name + ": " + port_connection_name;
       myport.port_connected = true;
-      if(myport.myPort_name.equals(port1.myPort_name))     { thread("requestSensorState"); } // Get current sensor pins and values
-      else if(myport.myPort_name.equals(port2.myPort_name)){ thread("requestRobotState");  } // Get current servo pins and angle measuers
+      if(myport.myPort_name.equals(port1.myPort_name)){      thread("requestRobotState");  } // Get current servo pins and angle measuers
+      else if(myport.myPort_name.equals(port2.myPort_name)){ thread("requestSensorState"); } // Get current sensor pins and values 
     } 
     catch( Exception e){ // If failed, display error message
       status = "Can't connect " + port_name + " to: " + port_connection_name; 

@@ -37,7 +37,7 @@ class Widgets{
     /*** Submission bar - the 'row' where all the   ***/
     /*** buttons that send instructions reside on. ***/
     /*************************************************/
-    int submission_bar_y = 230;
+    int submission_bar_y = 255;
     int font_size         = 3;
     int sub_btn_width    = 60;
     int sub_btn_height   = 15;
@@ -45,7 +45,7 @@ class Widgets{
     
     // Moves arm when in manual mode
     widget_control.addButton("go")       
-      .setPosition(275, submission_bar_y-30)              
+      .setPosition(275, submission_bar_y-65)              
       .setSize(20, sub_btn_height)                    
       .setFont(fonts.get(font_size))              
       .hide()                             
@@ -74,7 +74,7 @@ class Widgets{
    int nav_btn_height = 15;
    int nav_btn_width = 60;
    int btn_space = 10;
-   int nav_bar_y = 255;
+   int nav_bar_y = 280;
    int auto_manual_x = 480;
    int options_console_x = auto_manual_x+nav_btn_width+btn_space;
    int exit_x = options_console_x+nav_btn_width+btn_space;
@@ -124,7 +124,7 @@ class Widgets{
     /*********************************************/
     message_box = widget_control.addTextarea("message box")
      .setPosition(320,15)
-     .setSize(360,230)
+     .setSize(360,255)
      .show()
      .setLineHeight(16)
      .setColor(color(0)) // font
@@ -137,7 +137,7 @@ class Widgets{
     String input_field_names_servos[] = {"input body", "input shoulder", "input elbow", "input wrist", "input hand", "input handRotator"};
     int size = input_field_names_servos.length;
     int input_servo_x = 275;
-    int input_servo_y = 50;
+    int input_servo_y = 40;
     int input_width = 20;
     int input_height = 15;
        
@@ -163,7 +163,7 @@ class Widgets{
     
     String input_field_names_servo_pins[] = {"pin body", "pin shoulder", "pin elbow", "pin wrist", "pin hand", "pin handRotator"};
     size = 3; // 6 servos, 2 columns of 3
-    int input_servo_pin_x = 650;
+    int input_servo_pin_x = 535;
     int input_servo_pin_y = 105;
     int input_pin_width = 13;
     int input_pin_height = 15;
@@ -201,10 +201,10 @@ class Widgets{
     /**********************************************/
     /****** Input texfields for Sensor pins  ******/
     /**********************************************/
-    String input_field_names_sensor_pins[] = {"pin flex", "pin emg", "pin gryo"};
-    size = input_field_names_sensor_pins.length; // 1 column of 3 sensors
-    int input_sensor_pin_x = 405;
-    int input_sensor_pin_y = 105;
+    String input_field_names_sensor_pins[] = {"pin gyro shoulder", "pin gyro elbow", "pin gryo wrist", "pin emg"};
+    size = input_field_names_sensor_pins.length; // 1 column of 4 sensors
+    int input_sensor_pin_x = 660; 
+    int input_sensor_pin_y = 105; 
     
     for(int i=0; i<size; i++){
       // first columnm
@@ -225,9 +225,9 @@ class Widgets{
     int drop_down_width = 100;
     int drop_down_height = 100;
   
-    /*****************************************/
-    /***** Port Selection Dropdown List 1*****/
-    /*****************************************/
+    /******************************************/
+    /***** Port Selection Dropdown List 1 *****/
+    /******************************************/
     available_ports1 = widget_control.addDropdownList("port 1")
         .setPosition(360, 50)
         .setFont(fonts.get(3))
@@ -235,9 +235,9 @@ class Widgets{
         .hide()
     ;
         
-    /*****************************************/
-    /***** Port Selection Dropdown List 2*****/
-    /*****************************************/
+    /******************************************/
+    /***** Port Selection Dropdown List 2 *****/
+    /******************************************/
     available_ports2 = widget_control.addDropdownList("port 2")
         .setPosition(540, 50)
         .setFont(fonts.get(3))
@@ -417,10 +417,10 @@ class Widgets{
   } 
 
   // Consoles main position and size
-  private void consoleMain(){ message_box.setPosition(320,15).setSize(360,230); }
+  private void consoleMain(){ message_box.setPosition(320,15).setSize(360,255); }
 
   // Consoles position and size in options menu 
-  private void consoleOptions(){ message_box.setPosition(320,185).setSize(220,60); }
+  private void consoleOptions(){ message_box.setPosition(320,185).setSize(220,85); }
   
   /*****************************/
   /*** Input Field Functions ***/

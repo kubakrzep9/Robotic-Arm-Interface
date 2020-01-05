@@ -157,9 +157,9 @@ void sendInstruction(String group_name){
 
   if(group_name.equals("servo angle input fields") || 
      group_name.equals("servo pin input fields")   ||
-     group_name.equals(armStateID)){ port = serial.getPort("Port 2"); }
+     group_name.equals(armStateID)){ port = serial.getPort("Port 1"); }
   else if(group_name.equals("sensor pin input fields") ||
-          group_name.equals(sensorStateID)){ port = serial.getPort("Port 1"); }
+          group_name.equals(sensorStateID)){ port = serial.getPort("Port 2"); }
   
   if(input_instruction){ instruction = makeInstruction(group_name); }
   else{ instruction = group_name; }
