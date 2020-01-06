@@ -1,0 +1,34 @@
+#include <MPU6050.h> // library for accelerometer and gyroscope 
+#include <Wire.h> // library for i2c communication
+#include <Servo.h> // library for servo
+
+Servo wrist;
+int servo_pin = 2;
+
+MPU6050 sensor;
+int16_t ax, ay, az; // the values will be unsigned 16 bit integers
+int16_t gx, gy, gz;
+int16_t wrist_roll;
+
+void setup() {
+
+Wire.begin();
+Serial.begin(9600);
+sensor.initialize();
+wrist.attach(servo_pin);
+
+
+}
+
+void loop() {
+
+sensor.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); // getting raw x,y,z values from gyroscope & accelerometer
+
+wrist_roll = map(ax, -17000, 17000, 0, 180); // wrist motion mapped to degrees
+
+wrist.write(wrist_roll); 
+
+delay(200);
+
+
+}
