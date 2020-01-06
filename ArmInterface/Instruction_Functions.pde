@@ -55,7 +55,7 @@ void instructionInterpreter(String instruction){
        parsed_instruction[0].equals("sensorPins") || parsed_instruction[0].equals("sensorValues")){
       int data[] = extract_instruction_data(parsed_instruction);
       if(data[0] == ERROR_VAL){ String error = "Instruction datatype error (Corrupt data?)"; println(error); println_console(error); return;  }
-      
+            
            if(parsed_instruction[0].equals("servoPins")){    robot.setServoPins(data);              }
       else if(parsed_instruction[0].equals("servoAngles")){  robot.setServoAngles(data);            }
       else if(parsed_instruction[0].equals("sensorPins")){   position_system.setSensorPins(data);   }

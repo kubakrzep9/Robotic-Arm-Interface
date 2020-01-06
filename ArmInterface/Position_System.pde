@@ -54,9 +54,10 @@ class Position_System{
   // Value getter
   public int[] getSensorValues(){
     int values[] = new int[num_data];
+    int val_i = 0;
     for(int i=0; i<num_MPU6050; i++){ 
       int angles[] = gyroscopes.get(i).getAngles();
-      for(int j=0; j<num_gyro_angles; j++){ values[i] = angles[j];}
+      for(int j=0; j<num_gyro_angles; j++){ values[val_i] = angles[j]; val_i++; }
     }
     values[num_data-1] = emg.getValue(); 
     return values;
@@ -71,14 +72,15 @@ class Position_System{
   }
   
   // Value setter
-  public void setSensorValues(int[] vals){ 
+  public void setSensorValues(int[] vals){   
     if(vals.length != num_data){ return; }
-    for(int i=0; i<num_MPU6050; i+=3){ 
-      int angles[] = {vals[i], vals[i+1], vals[i+2]};
+    int val_i = 0;
+    for(int i=0; i<num_MPU6050; i++){ 
+      int angles[] = {vals[val_i], vals[val_i+1], vals[val_i+2]}; val_i += 3; 
       gyroscopes.get(i).setAngles(angles); 
     } 
     emg.setValue(vals[num_data-1]);
-    if(!received_values){ received_values = true; }
+    if(!received_values){ received_values = true; }  
   }
   
   // Pin setter

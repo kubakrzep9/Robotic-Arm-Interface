@@ -1,4 +1,4 @@
-// Written by: Jakub Krzeptowski-Mucha
+ // Written by: Jakub Krzeptowski-Mucha
 //
 // Program Description: This GUI interfaces with a robotic arm and position sensor system.
 // Serial communication is used to send instructions back and forth from the GUI to the 
@@ -8,10 +8,31 @@
 // modes to control the arm: manual and auto. Manual mode allows the user to enter each servos 
 // angle measure. Auto mode uses (WILL USE) a calibrated position system to model a persons arm.
 //
+// Most Tedious Bug: GUI sensor values were not all updating. Only the shoulder gyroscope
+// was updating with the sensorValues update, however all sensor values when receiving the 
+// sensorState. The issue was using the wrong array indices when accesssing data. Occured 
+// more than once. 
+//
+//
+//
+//
 // NOTES
 //
 // USE TRY AND CATCHES 
 // - WILL SIMPLIFY WIDGET LIBRARY AND PROVIDE ERROR HANDLING FOR INVALID NAMES
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
 
 import processing.serial.*;
 import java.util.*; 
