@@ -1,0 +1,29 @@
+- Variables names will contain underscores "_" to seperate words. Ex: var_name 
+- Function and Method names will use camelCase conventions.       Ex: myCalcFunc()
+- Class names will have capitalize the first letter of each word. Ex: ClassName
+
+Example:
+// This example is written as a C++ header file (.h file) with the intention of importing into an Arduino program. 
+//
+// File named: ClassNameExample.h
+
+class ClassNameExample{
+  public: // Can be accessed/called from outside of class
+    // Class Members
+    int    int_data_member;
+    String str_data_member;
+    
+    // Class Method Prototypes
+    
+  
+  private: // Can only be accessed within this class
+    int  priv_int; 
+    bool priv_bool; 
+    
+    void classMethod1();            // takes no arguments and returns nothing
+    int  classMethod2(int, String); // takes an int and String as arguments and returns and int
+   
+    
+    
+
+};
