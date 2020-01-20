@@ -1,12 +1,12 @@
 Web based Github Version Control 
 
 What is a “Pull Request”? 
-● You are asking everyone to "pull" your changes on your branch into their master branches. 
+  ● You are asking everyone to "pull" your changes on your branch into their master branches. 
 
 What is a "Push Request"?
-● This is equivalent to dragging and dropping a file into the repository. 
-● You are "pushing" your changes into your branch. 
-  ○ In our case "pushing" goes directly into the master branch, however the project manager must approve your push. 
+  ● This is equivalent to dragging and dropping a file into the repository. 
+  ● You are "pushing" your changes into your branch. 
+    ○ In our case "pushing" goes directly into the master branch, however the project manager must approve your push. 
 
 Reposity 
   ● Making Changes, the Pull Request 
