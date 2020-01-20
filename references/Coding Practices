@@ -1,3 +1,5 @@
+In order to maintain a neat and organized code base we will follow a few simple programming practices and naming conventions.
+
 - Variables names will contain underscores "_" to seperate words. Ex: var_name 
 - Function and Method names will use camelCase conventions.       Ex: myCalcFunc()
 - Class names will have capitalize the first letter of each word. Ex: ClassName
