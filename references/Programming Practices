@@ -52,7 +52,6 @@ int  ClassNameExample::get_priv_int(){ return priv_int; }
 // Getter for priv_bool
 bool ClassNameExample::get_priv_bool(){ return priv_bool; }
 
-
 // Public, can be accessed outside of class.
 void ClassNameExample::classMethod1(){
   // Method body
