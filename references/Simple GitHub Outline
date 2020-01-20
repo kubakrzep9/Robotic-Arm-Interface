@@ -25,10 +25,12 @@ Reposity
           will take you to the “Propose file change” page. 
       iii. The process from here is identical to the process to add a file. Begin from step (ii) in the “To add a file” bullet. 
 
-Project 
+Project Structure
   ● Project Board 
     ○ Simple way to stay organized. 
       ■ There are To do, In progress and Done lists. 
+  ● Project Board
+    ○ Simple way to store and collaborate on a code base. 
   ● Accessing Project Board 
     ○ To access the Project Board on Github you must access it from my account (kubakrzep9). 
     ○ From my homepage go to the projects tab and select our project (Robotic Arm Interface).
