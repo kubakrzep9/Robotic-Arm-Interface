@@ -1,10 +1,17 @@
-Programming Practices 
 
 In order to maintain a neat and organized code base we will follow a few simple programming practices and naming conventions.
 
-- Variables names will lowercase and contain "_" to seperate words. Ex: my_var_name 
-- Function and Method names will use camelCase conventions.         Ex: myCalcFunc()
-- Class names will capitalize the first letter of each word.        Ex: MyClassName
+Programming Practices
+- Header files containing a class will be named ClassName.h
+- Pass sets of values (sensor values) to methods as an array. Easier to iterate through. 
+- To return an array you must pass in an instantiated array as a reference parameter to the method. 
+  - There are two kinds of parameters, pass by value (using a copy, not modifying parameter) and pass by reference (get the 
+    actual variable you are passing, can modify). 
+
+Naming Conventions 
+- Variables names will be lowercase and contain "_" to seperate words. Ex: my_var_name 
+- Function and Method names will use camelCase conventions.            Ex: myCalcFunc()
+- Class names will capitalize the first letter of each word.           Ex: MyClassName
 
 Example:
 // This example is written as a C++ header file (.h file) with the intention of importing into an Arduino program.
@@ -14,7 +21,7 @@ Example:
 class ClassNameExample{
 
   public: // Can be accessed/called from outside of class
-    // Class Members
+    // Class public members
     int int_data_member; // This can be a value that does not change but can be accessed outside of class. 
                          // Adding the static const datatype allows for this data member to be accessed 
                          // WITHOUT instanting an object. The const prevents this members value from being
@@ -33,17 +40,18 @@ class ClassNameExample{
     void classMethod1(); // Takes no arguments and returns nothing
   
   private: // Can only be accessed within this class
+    // Class private members
     int  priv_int;  // Read and write outside of class throught setter and getter
     bool priv_bool; // Read only outside of class through getter
     
-    // Private class method prototypes
+    // Private class method prototype
     int  classMethod2(int, String); // Takes an int and String as arguments and returns and int
 
 }; // This is the end of the class declaration. We still need to define the class method prototypes we declared. 
 
-// To define a class method prototype outside of the class declaration you need to prepend the class method name with
-// the ClassName:: (in our case ClassNameExample::). This allows the compiler (the thing that checks if your program 
-// is valid) to match the method definition to the method protoype.
+// To define a class method prototype outside of the class declaration you need to prepend the class method name 
+// with ClassName:: (in our case ClassNameExample::). This allows the compiler (the thing that checks if your 
+// program is valid) to match the method definition to the method protoype.
 
 // Setter for priv_int
 void ClassNameExample::set_priv_int(int value){ priv_int = value; }
