@@ -22,10 +22,10 @@ class ClassNameExample{
 
   public: // Can be accessed/called from outside of class
     // Class public members
-    int int_data_member; // This can be a value that does not change but can be accessed outside of class. 
-                         // Adding the static const datatype allows for this data member to be accessed 
-                         // WITHOUT instanting an object. The const prevents this members value from being
-                         // changed. Not sure if we will use static const, but I wanted to introduce it.
+    static const int int_value; // This can be a value that does not change but can be accessed outside of class. 
+                                // Adding the static const datatype allows for this data member to be accessed 
+                                // WITHOUT instanting an object. The const prevents this members value from being
+                                // changed. Not sure if we will use static const, but I wanted to introduce it.
 
     // Class member setter and getter prototypes. Setters and getters are used to access and modify datamembers.
     // These data members can private, protected (most likely will not use but you can look into) and public. Setters
