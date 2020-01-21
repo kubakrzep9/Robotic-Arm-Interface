@@ -4,7 +4,7 @@ In order to maintain a neat and organized code base we will follow a few simple 
 Programming Practices
 - Header files containing a class will be named ClassName.h
 - Pass sets of values (sensor values) to methods as an array. Easier to iterate through. 
-- To return an array you must pass in an instantiated array as a reference parameter to the method. 
+- To return an array you must pass in an instantiated array (of the EXACT size) as a reference parameter to the method. 
   - There are two kinds of parameters, pass by value (using a copy, not modifying parameter) and pass by reference (get the 
     actual variable you are passing, can modify).
 
