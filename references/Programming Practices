@@ -69,11 +69,13 @@ int  ClassNameExample::get_priv_int(){ return priv_int; }
 // Getter for priv_bool
 bool ClassNameExample::get_priv_bool(){ return priv_bool; }
 
+// Default class constructor
 ClassNameExample::ClassNameExample(){
   priv_int = 0;
   priv_bool = false;
 }
 
+// Class constructor that takes int and bool 
 ClassNameExample::ClassNameExample(int i, bool b){
   priv_int = i;
   priv_bool = b;
