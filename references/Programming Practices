@@ -7,6 +7,7 @@ Programming Practices
 - To return an array you must pass in an instantiated array (of the EXACT size) as a reference parameter to the method. 
   - There are two kinds of parameters, pass by value (using a copy, not modifying parameter) and pass by reference (get the 
     actual variable you are passing, can modify).
+- Minimize white space. Try to seperate things (methods, flow within method, etc) using one or limited white space. 
 
 Naming Conventions 
 - Variables names will be lowercase and contain "_" to seperate words. Ex: my_var_name 
@@ -42,7 +43,10 @@ class ClassNameExample{
                                  // constructor, but can have ClassNameExample(int).
     
     // Public class method protoypes.
-    void classMethod1(); // Takes no arguments and returns nothing
+    void classMethod1();    // Takes no arguments and returns nothing
+    void doNothingMethod(){ // Can instantiate method inside class declaration. If it is a one line method,
+      // method body        // like setter or getter, you may instantiate method within class, otherwise  
+     }                      // instantiate methods outside of class. 
   
   private: // Can only be accessed within this class
     // Class private members
@@ -86,8 +90,3 @@ void ClassNameExample::classMethod1(){
 int ClassNameExample::classMethod2(int arr[], int arr_size, String str){
   // Method body
 }
-
-
-
-
-
