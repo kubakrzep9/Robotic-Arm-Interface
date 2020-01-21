@@ -14,7 +14,7 @@ Naming Conventions
 - Class names will capitalize the first letter of each word.           Ex: MyClassName
 
 Example:
-// This example is written as a C++ header file (.h file) with the intention of importing into an Arduino program.
+// This example is written as a C++ header file (.h file) which can be imported into an Arduino project.
 //
 // File named: ClassNameExample.h
 
