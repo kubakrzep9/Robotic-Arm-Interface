@@ -50,7 +50,7 @@ class ClassNameExample{
     bool priv_bool; // Read only outside of class through getter
     
     // Private class method prototype
-    int  classMethod2(int, String); // Takes an int and String as arguments and returns and int
+    int  classMethod2(int[], int, String); // Takes an int array, int and String as arguments and returns and int
 
 }; // This is the end of the class declaration. We still need to define the class method prototypes we declared. 
 
@@ -80,8 +80,10 @@ void ClassNameExample::classMethod1(){
   // Method body
 }
 
-// Private, will be used within the class. Takes in two arguments and returns an int, could a calculation method of sorts. 
-int ClassNameExample::classMethod2(int i, String str){
+// Private, will be used within the class. Takes in three arguments and returns an int, could 
+// be a calculation method of sorts. It is common to pass the array size as a parameter, however
+// there are methods you can use to find the size or length of an array. 
+int ClassNameExample::classMethod2(int arr[], int arr_size, String str){
   // Method body
 }
 
