@@ -32,9 +32,14 @@ class ClassNameExample{
     // and getters for public datamembers is fairly redundant as these members can be directly modified and accessed. 
     // However, setters and getters can allow access and modification to specific private data members, not all private
     // members will need setters and or getters. 
-    void set_priv_int(int); // Write access
-    int  get_priv_int();    // Read access
-    bool get_priv_bool();   // Read access 
+    void set_priv_int(int);      // Write access
+    int  get_priv_int();         // Read access
+    bool get_priv_bool();        // Read access
+    
+    ClassNameExample();          // Class constructor. A constructor is called when a class object is first instantiated.
+    ClassNameExample(int, bool); // A class can have as many constructors as the class needs, but the constructor signature
+                                 // (parameters types and ordering) must be unique. Ex: cannot have another ClassNameExample() 
+                                 // constructor, but can have ClassNameExample(int).
     
     // Public class method protoypes.
     void classMethod1(); // Takes no arguments and returns nothing
@@ -59,6 +64,16 @@ void ClassNameExample::set_priv_int(int value){ priv_int = value; }
 int  ClassNameExample::get_priv_int(){ return priv_int; }
 // Getter for priv_bool
 bool ClassNameExample::get_priv_bool(){ return priv_bool; }
+
+ClassNameExample::ClassNameExample(){
+  priv_int = 0;
+  priv_bool = false;
+}
+
+ClassNameExample::ClassNameExample(int i, bool b){
+  priv_int = i;
+  priv_bool = b;
+}
 
 // Public, can be accessed outside of class.
 void ClassNameExample::classMethod1(){
