@@ -45,14 +45,20 @@ class RobotArm{
     void setPins(int[]); 
     void moveArm(int[]);
     void initialPosition();
-    void sendState();
-    void print_info();      
-
+    void get_value(String, int[]);
+    
   private: 
     _servo servos[num_servos];
-    String makeInstruction(String);
-    void sendInstruction(String);
+
 };
+
+
+void RobotArm::get_value(String _name, int ret_arr[]){
+       if(_name == "angles"){ for(int i=0; i<num_servos; i++){ ret_arr[i] = servos[i].angle; } }
+  else if(_name == "pins"  ){ for(int i=0; i<num_servos; i++){ ret_arr[i] = servos[i].pin;   } }
+}
+
+
 
 // Constructor, called when object is created. Sets the name and angle of each servo 
 // in the robotic arm. 
@@ -106,34 +112,37 @@ void RobotArm::initialPosition(){
 /*****************************/
 /*** Instruction Functions ***/
 /*****************************/
-
-// Sends the current pins and angles of the servos in the robotic arm, when the
-// armState is requested. 
-void RobotArm::sendState(){
-  sendInstruction("servoPins");
-  sendInstruction("servoAngles");
-}
-
-// Returns a String instruction containing an instructionID followed by data values 
-// seperated by white spaces. Ex: "servoPins 1 2 3 4 5 6". 
-String RobotArm::makeInstruction(String instructionID){
-  String instruction = instructionID;
-  String robot_data[num_servos];
-
-       if(instructionID == "servoPins"){   for(int i=0; i<num_servos;i++){ robot_data[i] = String(servos[i].pin);   } }
-  else if(instructionID == "servoAngles"){ for(int i=0; i<num_servos;i++){ robot_data[i] = String(servos[i].angle); } }
-  for(int i=0; i<num_servos; i++){ instruction = instruction + " " + robot_data[i]; }
-
-  return instruction;
-} 
-
-// Sends instruction via serial communication. The instruction is built using 
-// the passed in instructionID. The respective data values are attached to the 
-// instructionID in makeInstruction().
-void RobotArm::sendInstruction(String instructionID){ 
-  String instruction = makeInstruction(instructionID);
-  Serial.println(instruction); 
-  delay(DELAY_TIME); 
-}
+//
+//// Sends the current pins and angles of the servos in the robotic arm, when the
+//// armState is requested. 
+//void RobotArm::sendState(){
+//  sendInstruction("pins");
+//  sendInstruction("values");
+//}
+//
+//// Returns a String instruction containing an instructionID followed by data values 
+//// seperated by white spaces. Ex: "servoPins 1 2 3 4 5 6". 
+//String RobotArm::makeInstruction(String instructionID){
+//  String systemID = "RA";
+//  String instruction = systemID+" "+instructionID;
+//  String robot_data[num_servos];
+//
+//
+//  // ADD PRESSURE GAUGE VALUE TO "values" INSTRUCTION
+//       if(instructionID == "pins"){   for(int i=0; i<num_servos;i++){ robot_data[i] = String(servos[i].pin);   } }
+//  else if(instructionID == "values"){ for(int i=0; i<num_servos;i++){ robot_data[i] = String(servos[i].angle); } }
+//  for(int i=0; i<num_servos; i++){ instruction = instruction + " " + robot_data[i]; }
+//
+//  return instruction;
+//} 
+//
+//// Sends instruction via serial communication. The instruction is built using 
+//// the passed in instructionID. The respective data values are attached to the 
+//// instructionID in makeInstruction().
+//void RobotArm::sendInstruction(String instructionID){ 
+//  String instruction = makeInstruction(instructionID);
+//  Serial.println(instruction); 
+//  delay(DELAY_TIME); 
+//}
 
 #endif
