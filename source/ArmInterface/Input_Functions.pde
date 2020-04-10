@@ -20,32 +20,29 @@ String[] getInputText(String group_name){ return w.getInputFieldText(group_name)
 // input will return 0. All empty input fields will return a 2. Partially empty input
 // fields will be filled with their respective current values. Valid (and now filled) values 
 // will remain in the passed input array and 1 will be returned. 
-int validateInput(String[] input, String group_name){ 
+int validateInput(String dest_id, String group_name, String[] input){ 
   int size = input.length;
   int int_input[] = new int[size];
  
   if(inputIsEmpty(input)){ return 2; }  // User does not want to change anything. Do nothing. User clicked button without setting anything. 
   if(inputIsInvalid(input, int_input)){ // Error, invalid input 
-    String error_text = "Enter only integers.";
-    w.println_console_timed(error_text);
-    println(error_text);
+    String error_text = dest_id+" Enter only integers.";
+    println_all(error_text);
     return 0; 
   }
-  if(group_name.equals("servo angle input fields")){   // Validating servo input is within range [0-180]
+  if(group_name.equals(w.RA_angle_input_fields_ID)){   // Validating servo input is within range [0-180]
     if(!inputInRange(int_input)){
-      String error_text = "Enter only integer angles [0 - 180].";
-      w.println_console_timed(error_text);
-      println(error_text);
+      String error_text = dest_id+" Enter only integer angles [0 - 180].";
+      println_all(error_text);
       return 0;
     }
   }
   // Filling empty input values with current values to fill instruction.
   fillEmptyInput(input, group_name);
-  if(group_name.equals("servo pin input fields") || group_name.equals("sensor pin input fields")){       
+  if(group_name.equals(w.RA_pin_input_fields_ID) || group_name.equals(w.UPS_pin_input_fields_ID)){       
     if(hasDuplicates(strArr_to_intArr(input))){
-      String error_text = "Pin values must all be unique.";
-      w.println_console_timed(error_text);
-      println(error_text);
+      String error_text = dest_id+" Pin values must all be unique.";
+      println_all(error_text);
       return 0; 
     } 
   }
@@ -65,7 +62,7 @@ int[] strArr_to_intArr(String[] input){
   int intArr[] = new int[size];
   for(int i=0; i<size; i++){
     try{ intArr[i] = Integer.parseInt(input[i]); }
-    catch(Exception e){ w.println_console_timed("Cannot convert String to int"); }
+    catch(Exception e){ println_all("Cannot convert String to int"); }
   }
   return intArr;
 }

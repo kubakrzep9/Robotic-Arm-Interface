@@ -20,16 +20,6 @@
 //
 // USE TRY AND CATCHES 
 // - WILL SIMPLIFY WIDGET LIBRARY AND PROVIDE ERROR HANDLING FOR INVALID NAMES
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -43,6 +33,9 @@ Robot robot;
 GUI_Settings gui;
 Widgets w;
 Serial_COM serial;
+
+String AI_id = "GUI";
+Boolean UPS_RA_Link = false;
 
 // Sets up the font, each system and the GUI. 
 void setup(){
@@ -67,6 +60,7 @@ void setfonts(){
   fonts.add(createFont("Liberation Sans bold", 9));   // [3] font for small button text
 }
 
+
 // Returns whether the armState has been received or not. The armState (the pins and angles of the arm)
 // is the data contained in the servoPins and servoAngles instructions. 
 boolean waiting_for_robot_state(){if(!robot.get_state_received()){ return true; } return false; }
@@ -76,13 +70,12 @@ boolean waiting_for_robot_state(){if(!robot.get_state_received()){ return true; 
 // armState is received, the information will be updated onto the GUI and the thread will
 // terminate.
 public void requestRobotState(){
-  String text = "Requesting armState";
+  String text = "Requesting RA state";
   
   while(waiting_for_robot_state()){
     delay(2000);
-    println(text);
-    println_console(text);
-    sendInstruction("armState");
+    //println_all(text);
+    sendInstruction("RA", "state");
     delay(2000);
   }
 }
@@ -95,14 +88,13 @@ boolean waiting_for_sensor_state(){if(!position_system.get_state_received()){ re
 // will repeatedly request the sensorState of the system via Serial communication. When the 
 // sensorState is received, the information will be updated onto the GUI and the thread will
 // terminate.
-public void requestSensorState(){
-  String text = "Requesting sensorState";
+public void requestUPSState(){
+  //String text = "Requesting UPS state";
   
   while(waiting_for_sensor_state()){
     delay(2000);
-    println(text);
-    println_console(text);
-    sendInstruction("sensorState");
+    //println_all(text);
+    sendInstruction("UPS", "state");
     delay(2000);
   }
 }

@@ -6,16 +6,22 @@
 
 class Robot{
   private static final int num_servos = 6;
+  private static final int num_sensors = 1;
   private final String[] servo_names= {"Body", "Shoulder", "Elbow", "Wrist", "Hand", "Hand RTTR"};
   private ArrayList <Servo> servos;
+  public Pressure_Gauge ra_pressure;
   private boolean state_received = false;
   private boolean received_pins = false;
   private boolean received_angles = false;
+  private String system_id = "RA";
   
   Robot(){     
     servos = new ArrayList(num_servos);
     for(int i=0; i<num_servos; i++){ servos.add(new Servo(servo_names[i])); }
+    ra_pressure = new Pressure_Gauge("RA Press");
   }
+  
+  public String getSystemID(){ return system_id; }
   
   public int getNumServos(){ return num_servos; }
   
@@ -52,6 +58,7 @@ class Robot{
     for(int i=0; i< num_servos; i++){ servos.get(i).setAngle(angles[i]); }
     if(!received_angles){ received_angles = true; }
   }
+ 
   
   //Pin setter
   public void setServoPins(int pins[]){
@@ -62,25 +69,38 @@ class Robot{
   
   
   
-  // Subclass for the Robot class. The robotic arm is made up of 6 servos that control the 
-  // arm's motion. 
-  class Servo{
-    private int pin;
-    private int angle;
-    private String _name;
-    
-    Servo(String n){
-      pin = 0;
-      angle = 0;
-      _name = n;
-    }
-    
-    // Setters and Getters for servo data members. 
-    private int getAngle(){ return angle;              }
-    private void setAngle(int a){ angle = a;           }
-    private int getPin(){ return pin;                  }
-    private void setPin(int p){ pin = p;               }
-    private String get_name(){ return _name;           }
-    private void set_name(String n){ _name = n;        }
+  
+  // Main class methods to interact with data
+  
+  public int[] getValues(){
+    int all_values[] = new int[num_servos+num_sensors];
+    int servo_values[] = getServoAngles();
+    for(int i=0; i<num_servos; i++){ all_values[i] = servo_values[i]; }
+    all_values[num_servos] = ra_pressure.getValue();
+    return all_values;  
+  }
+  
+  public int[] getPins(){
+    int all_pins[] = new int[num_servos+num_sensors];
+    int servo_pins[] = getServoPins();
+    for(int i=0; i<num_servos; i++){ all_pins[i] = servo_pins[i]; }
+    all_pins[num_servos] = ra_pressure.getPin();
+    return all_pins;  
+  }
+  
+  public void setPins(int all_pins[]){
+    int servo_pins[] = new int[num_servos];
+    // elements 0 - 5 are servo pins
+    for(int i=0; i<num_servos; i++){servo_pins[i] = all_pins[i]; }
+    setServoPins(servo_pins);
+    ra_pressure.setPin(all_pins[num_servos]);
+  }
+
+  public void setValues(int all_values[]){
+    int servo_values[] = new int[num_servos];
+    // elements 0 - 5 are servo pins
+    for(int i=0; i<num_servos; i++){servo_values[i] = all_values[i]; }
+    setServoAngles(servo_values);
+    ra_pressure.setValue(all_values[num_servos]);
   }
 }

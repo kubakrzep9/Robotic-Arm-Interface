@@ -7,30 +7,15 @@ import controlP5.*;
 /*** Button Event Actions ***/
 /****************************/
 
-// Activates auto mode. On the GUI, causes the mode to display "MODE: AUTO" and swaps the auto
-// button with the manual button. Auto mode enables the position system and begins (WILL BEGIN)
-// modeling an individuals arm. 
-void auto(){
-  String text = "Auto mode activated.";
-  println(text);
-  println_console(text);
-  w.autoWidgets();
-  gui.set_auto_mode(true);
-  
-  //setAutoMode(True);
-}
+// Sends an instruction to activate auto mode. On the GUI, causes the mode to display 
+// "MODE: AUTO" and swaps the auto button with the manual button. Auto mode enables 
+// the position system and begins modeling an individuals arm. 
+void auto(){ sendInstruction("UPS", "mode", "auto"); }
 
-// Activates manual mode. On the GUI, causes the mode to display "MODE: MANUAL" and swaps the manual
-// button with the auto button. Manual mode enables the user the enter each servos angle measure.  
-void manual(){
-  String text = "Manual mode activated.";
-  println(text);
-  println_console(text);
-  w.manWidgets();
-  gui.set_auto_mode(false);
-  
-  // setAutoMode(False);
-}
+// Sends an instruction to the ups to activate manual mode. On the GUI, causes the mode to display 
+// "MODE: MANUAL" and swaps the manual button with the auto button. Manual mode enables the user 
+// the enter each servos angle measure.  
+void manual(){ sendInstruction("UPS", "mode", "manual"); }
 
 // Shows options widgets and hides console. The options widgets allow the user to set the
 // port of each system and to set the pins of each of the sensors and servos used.
@@ -48,7 +33,7 @@ void console(){
 // Sends instruction to move the arm.
 // Ex: "servoAngles 180 0 90 0 90 90".
 void go(){
-  sendInstruction("servo angle input fields");
+  sendInstruction("RA", "move");
   w.clearTextFields("angles");
 }
 
@@ -67,8 +52,8 @@ void ports(){ connectPorts(); }
 // Ex: "servoPins 1 2 3 4 5 6"
 //     "sensorPins 7 8 9"
 void pins(){
-  sendInstruction("servo pin input fields");
-  sendInstruction("sensor pin input fields");
+  sendInstruction("RA", "set_pins");
+  sendInstruction("UPS", "set_pins");
   w.clearTextFields("pins");
 }
 
@@ -88,15 +73,6 @@ void controlEvent(ControlEvent theEvent) {
        }
      }
   }
-  // Connecting Robotic Arm port
-   if(theEvent.getName().equals("port 2")){
-     int index = int(theEvent.getController().getValue());
-     if(index > 0){
-       if(!serial.port_connected("port 2")){
-          serial.setPortName("port 2", w.getItemDropDownList(w.available_ports2, index), index);
-       }
-     }
-  }
 }
 
 /************************/
@@ -105,3 +81,5 @@ void controlEvent(ControlEvent theEvent) {
 
 // Wrapper function to print onto the GUI console. 
 void println_console(String text){ w.println_console_timed(text); }
+
+void println_all(String text){ w.println_console_timed(text);  println(text); }

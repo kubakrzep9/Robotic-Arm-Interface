@@ -40,8 +40,7 @@ void serialEvent(Serial port){
     // removing last character, which is ' '
     if(message.length() > 0) { message = message.substring(0, message.length() - 1); }
     
-    println("RECEIVED: " + message);
-    println_console("RECEIVED: " + message);
+    println_all("RECEIVED: " + message);
     instructionInterpreter(message);
   }
 }
@@ -49,55 +48,116 @@ void serialEvent(Serial port){
 // When an instruction is received it is sent to the instruction interpretter, where it will be parsed
 // to determine the instructionID and data values. If the instruction is valid, the instructionID will
 // be used to determine which branch to execute.
+//
+// [0] = dest_id
+// [1] = instruction_id
+// [2], ..., [n] = data
+
 void instructionInterpreter(String instruction){
+  String robot_id = robot.getSystemID();
+  String ups_id = position_system.getSystemID();
+  
   String parsed_instruction[] = instruction.split(" ");
-    if(parsed_instruction[0].equals("servoPins")  || parsed_instruction[0].equals("servoAngles") ||
-       parsed_instruction[0].equals("sensorPins") || parsed_instruction[0].equals("sensorValues")){
-      int data[] = extract_instruction_data(parsed_instruction);
-      if(data[0] == ERROR_VAL){ String error = "Instruction datatype error (Corrupt data?)"; println(error); println_console(error); return;  }
-            
-           if(parsed_instruction[0].equals("servoPins")){    robot.setServoPins(data);              }
-      else if(parsed_instruction[0].equals("servoAngles")){  robot.setServoAngles(data);            }
-      else if(parsed_instruction[0].equals("sensorPins")){   position_system.setSensorPins(data);   }
-      else if(parsed_instruction[0].equals("sensorValues")){ position_system.setSensorValues(data); }
-      
-      if(!robot.get_state_received()){ if(robot.check_state()){ robot.set_state_received(true); } }
-      if(!position_system.get_state_received()){ if(position_system.check_state()){ position_system.set_state_received(true); } }
-   }
+  boolean valid_instr = true; 
+  // Extractable data type containers
+  int int_array_data[] = {1}; // Always gets overwritten to new array when used.
+  boolean bool_data = false;
+  // meta data to interpret instruction 
+  String src_id = parsed_instruction[0];
+  String dest_id = parsed_instruction[1];
+  String instr_id = parsed_instruction[2];
+
+
+
+  //Validating and extracting int data from relevant instructions 
+  if(instr_id.equals("pins") || instr_id.equals("values")){ 
+    int size = parsed_instruction.length;
+    int num_meta_data = 3;
+    int num_data = size - num_meta_data;
+       
+    // Validating number of data
+    if(instr_id.equals("pins")){
+      if(src_id.equals(robot_id)){
+        if(num_data != (Robot.num_servos + Robot.num_sensors)){ println_all(dest_id+" Invalid number of data in "+instr_id+" instruction."); return; } }
+      else if(src_id.equals(ups_id)){
+        if(num_data != position_system.num_sensors){ println_all(dest_id+" Invalid number of data in "+instr_id+" instruction."); return; } }
+    }else if(instr_id.equals("values")){
+      if(src_id.equals(robot_id)){
+        if(num_data != (Robot.num_servos + Robot.num_sensors)){ println_all(dest_id+" Invalid number of data in "+instr_id+" instruction."); return; } }
+      else if(src_id.equals(ups_id)){
+        if(num_data != position_system.num_data){ println_all(dest_id+" Invalid number of data in "+instr_id+" instruction."); return; } }
+    }
+       int_array_data = new int[num_data];
+       valid_instr = validate_extract_int_data(src_id, instr_id, parsed_instruction, int_array_data);  
+       if(!valid_instr){ return;  }     
+    
+  }else if(instr_id.equals("ups_ra_link")){ bool_data = extract_link_data(parsed_instruction); }
+    
+  // Decision structure to execute instructions
+  if(src_id.equals(robot_id)){     
+     // executing instructions
+          if(instr_id.equals("pins")){   robot.setPins(int_array_data);   }
+     else if(instr_id.equals("values")){ robot.setValues(int_array_data); }  
+  }  
+  else if(src_id.equals(ups_id)){
+     // executing instructions
+          if(instr_id.equals("pins")){       position_system.setPins(int_array_data);       }
+     else if(instr_id.equals("values")){     position_system.setValues(int_array_data);     }  
+     else if(instr_id.equals("mode")){  
+       String mode = parsed_instruction[3];
+       mode = mode.substring(0,mode.length()-1);    // removing mystery char. Trim() couldnt even delete
+       if(position_system.setMode(mode)){
+         if(mode.equals("auto")){
+           w.autoWidgets();
+           gui.set_auto_mode(true);
+         }else if(mode.equals("manual")){
+           w.manWidgets();
+           gui.set_auto_mode(false);
+         }
+       }
+     }
+     else if(instr_id.equals("ps_ra_link")){ UPS_RA_Link = bool_data; }
+  }else{ println_all("Invalid instruction: \""+instruction+"\"");}
+  
+  if(!robot.get_state_received()){ if(robot.check_state()){ robot.set_state_received(true); } }
+  if(!position_system.get_state_received()){ if(position_system.check_state()){ position_system.set_state_received(true); } }
 }
 
-// Extracts the integer data from an instruction. An instruction is an instructionID followed by 
-// data members and so the first piece of data is in element 1 of parsed_instruction.
-int[] extract_instruction_data(String parsed_instruction[]){
+boolean extract_link_data(String parsed_instruction[]){ 
+  if(parsed_instruction[1].equals("connected")){ return true; }
+  return false;
+}
+
+// Extracts the integer data from an instruction. An instruction is "systemID instrID data1 data2 ... ".
+// The first piece of data is in element 2 of parsed_instruction.
+boolean validate_extract_int_data(String src_id, String instr_id, String parsed_instruction[], int ret_arr[]){
   int size = parsed_instruction.length;
-  String string_data[] = new String[size-1];
-  int i = 0;
+  int num_meta_data = serial.num_meta_data;
+  int num_data = size - num_meta_data;
   
-  for(;i<size-1; i++){ string_data[i] = parsed_instruction[i+1]; }
-  int data[] = stringArr_to_intArr(string_data);
-  
-  return data;
+  // Validating int datatypes
+  String string_data[] = new String[num_data];
+  for(int i=0; i<num_data; i++){ string_data[i] = parsed_instruction[num_meta_data+i]; }
+  boolean valid = stringArr_to_intArr(string_data, ret_arr);
+  if(!valid){ println_all(src_id+" "+instr_id+" instruction datatype error"); }
+  return valid;
 }
 
 // Converts and returns a string array into an integer array. Returns ERROR_VAL
 // if a string element cannot be converted into a string. 
-int[] stringArr_to_intArr(String str[]){
-  boolean valid_data = true;
+boolean stringArr_to_intArr(String str[], int ret_arr[]){
   int size = str.length;
-  int intArr[] = new int[size];
-  
+    
   // Validating servo input is within range [0-180]  
   for(int i=0; i<size; i++){ 
-    try{ intArr[i] = Integer.parseInt(str[i]); }
+    try{ ret_arr[i] = Integer.parseInt(str[i]); }
     catch(Exception e){ 
       // End of instructions seem to have "\\s", last token cannot be cast to int without removing it
-      try{intArr[i] = Integer.parseInt(str[i].replaceAll("\\s","")); }
-      catch(Exception e2){ valid_data = false; }
+      try{ret_arr[i] = Integer.parseInt(str[i].replaceAll("\\s","")); }
+      catch(Exception e2){ return false; }
     }
   }
-  
-  if(valid_data){ return intArr; }
-  else{ int errorArr[] = {ERROR_VAL}; return errorArr;  }
+  return true;
 }
 
 /*************************************/
@@ -110,31 +170,28 @@ void connectPorts(){ serial.connectionFunction(); }
 // Returns an instruction based on group_name. An instruction is an instructionID followed
 // by data values seperated by spaces. Ex: "instrID 1 2 3 4 5 6". The instructionID and data
 // values are determined by the group_name. 
-String makeInstruction(String group_name){
+String makeInstruction(String dest_id, String instr_id){
+  String group_name = "";
+  String error = "invalid";
+  if(dest_id.equals("RA")){
+    if(instr_id.equals("move")){            group_name = w.RA_angle_input_fields_ID; }
+    else if(instr_id.equals("set_pins")){   group_name = w.RA_pin_input_fields_ID;   }
+    else{ println_all("Invalid instructionID in makeInstruction()");  return error; }  
+  }else if(dest_id.equals("UPS")){
+    if(instr_id.equals("set_pins")){        group_name = w.UPS_pin_input_fields_ID;  }
+    else{ println_all("Invalid instructionID in makeInstruction()");  return error; }  
+  }else{ println_all("Invalid dest_id in makeInstruction()"); return error; }
+ 
+  // Gettin user input 
   String input[] = getInputText(group_name);
-  int input_status = validateInput(input, group_name);
-  if(input_status == 0 || input_status == 2){ return "invalid"; }
-  
-  String instructionID = "";
-  if(group_name.equals("servo angle input fields")){     instructionID = "servoAngles"; }
-  else if(group_name.equals("servo pin input fields")){  instructionID = "servoPins";   }
-  else if(group_name.equals("sensor pin input fields")){ instructionID = "sensorPins";  }
-  else{ w.println_console_timed("Invalid group_name for instruction"); }
-  
-  String instruction = instructionID;
+  int input_status = validateInput(dest_id, group_name, input);
+  if(input_status == 0 || input_status == 2){ return error; }
+   
+  String instruction = AI_id+" "+dest_id + " " + instr_id;
   int size = input.length;
-  
   for(int i=0; i<size; i++){ instruction = instruction+" "+input[i]; }
-  int int_input[] = strArr_to_intArr(input);
-
-  // Update GUI. Updating GUI version of robot and position system. 
-  if(group_name.equals("servo angle input fields")){     robot.setServoAngles(int_input);           }
-  else if(group_name.equals("servo pin input fields")){  robot.setServoPins(int_input);             }
-  else if(group_name.equals("sensor pin input fields")){ position_system.setSensorPins(int_input);  }
-  
+    
   // Return instruction to be sent
-  println(instruction);
-  w.println_console_timed(instruction);
   return instruction;
 }
 
@@ -146,36 +203,45 @@ String makeInstruction(String group_name){
 // Example instruction: "servoAngles 90 90 90 90 0 0". 
 // This instruction would use group name "servo angle input fields" to get the entered values 
 // from the respective input fields. 
-void sendInstruction(String group_name){ 
-  String armStateID = "armState";
-  String sensorStateID = "sensorState";
-  
+void sendInstruction(String dest_id, String instr_id){ 
   String instruction = "";
-  Serial port = null;
+  Serial port = serial.getPort("Port 1");;
   boolean input_instruction = true;
-  if(group_name.equals(armStateID) || group_name.equals(sensorStateID)){ input_instruction = false; }
+  String src_id = AI_id;
 
-  if(group_name.equals("servo angle input fields") || 
-     group_name.equals("servo pin input fields")   ||
-     group_name.equals(armStateID)){ port = serial.getPort("Port 1"); }
-  else if(group_name.equals("sensor pin input fields") ||
-          group_name.equals(sensorStateID)){ port = serial.getPort("Port 2"); }
+  if(instr_id.equals("state")){ input_instruction = false; }
   
-  if(input_instruction){ instruction = makeInstruction(group_name); }
-  else{ instruction = group_name; }
+  if(input_instruction){ instruction = makeInstruction(dest_id, instr_id); }
+  else{ instruction = src_id+" "+dest_id+" "+instr_id; }
     
   if(!instruction.equals("invalid")){ 
-    try{ port.write(instruction); }
-    catch(Exception e){ println("Can't sent instruction"); w.println_message_box("ERROR: Can't sent instruction"); }
+    try{ port.write(instruction); println_all("SENT: "+instruction);}
+    catch(Exception e){ println_all("ERROR: Can't sent instruction"); }
   }
 }
+
+// Overloaded method that allows String data to be attached to the instruction. To send any string 
+// pass the string into data and pass "" for dest_id and instr_id. Looser sendInstructions method, 
+// no validation.
+void sendInstruction(String dest_id, String instr_id, String data){ 
+  String instruction = "";
+  String src_id = AI_id;
+  
+  Serial port = serial.getPort("Port 1");
+  if(dest_id.equals("") && instr_id.equals("")){ instruction = data; }
+  else{ instruction = src_id+" "+dest_id+" "+instr_id+" "+data; } 
+  
+  try{ port.write(instruction); println_all("SENT: "+instruction);  }
+  catch(Exception e){ println_all("ERROR: Can't sent instruction"); }
+}
+
 
 // Returns the current value of a set of values identified by group_name. 
 // group_name = "servo angle input fields" returns the current angles of each servo in the robot. 
 int[] getCurrentValues(String group_name){
     int[] current_values = new int[1];
-    if(group_name.equals("servo angle input fields")){     current_values = robot.getServoAngles();          }
-    else if(group_name.equals("servo pin input fields")){  current_values = robot.getServoPins();            }
-    else if(group_name.equals("sensor pin input fields")){ current_values = position_system.getSensorPins(); }
+         if(group_name.equals(w.RA_angle_input_fields_ID)){ current_values = robot.getValues();         }
+    else if(group_name.equals(w.RA_pin_input_fields_ID)  ){ current_values = robot.getPins();           }
+    else if(group_name.equals(w.UPS_pin_input_fields_ID) ){ current_values = position_system.getPins(); }
     return current_values;
 }
