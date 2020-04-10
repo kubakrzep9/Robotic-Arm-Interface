@@ -4,6 +4,9 @@
 class PositionSystem{
   public: 
     static const int num_sensors = 1;
+
+ 
+    // TESTING VARIABLES 
     // will be replaced by julias pressure gauge object
     int pin = 0;
     int value = 10;

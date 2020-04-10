@@ -38,7 +38,6 @@ struct _servo{
 class RobotArm{
   public:
     static const int DELAY_TIME = 100;
-    static const int BAUDRATE   = 9600;    
     static const int num_servos = 6;
 
     RobotArm();
@@ -109,40 +108,5 @@ void RobotArm::initialPosition(){
   moveArm(init_pos);
 }
 
-/*****************************/
-/*** Instruction Functions ***/
-/*****************************/
-//
-//// Sends the current pins and angles of the servos in the robotic arm, when the
-//// armState is requested. 
-//void RobotArm::sendState(){
-//  sendInstruction("pins");
-//  sendInstruction("values");
-//}
-//
-//// Returns a String instruction containing an instructionID followed by data values 
-//// seperated by white spaces. Ex: "servoPins 1 2 3 4 5 6". 
-//String RobotArm::makeInstruction(String instructionID){
-//  String systemID = "RA";
-//  String instruction = systemID+" "+instructionID;
-//  String robot_data[num_servos];
-//
-//
-//  // ADD PRESSURE GAUGE VALUE TO "values" INSTRUCTION
-//       if(instructionID == "pins"){   for(int i=0; i<num_servos;i++){ robot_data[i] = String(servos[i].pin);   } }
-//  else if(instructionID == "values"){ for(int i=0; i<num_servos;i++){ robot_data[i] = String(servos[i].angle); } }
-//  for(int i=0; i<num_servos; i++){ instruction = instruction + " " + robot_data[i]; }
-//
-//  return instruction;
-//} 
-//
-//// Sends instruction via serial communication. The instruction is built using 
-//// the passed in instructionID. The respective data values are attached to the 
-//// instructionID in makeInstruction().
-//void RobotArm::sendInstruction(String instructionID){ 
-//  String instruction = makeInstruction(instructionID);
-//  Serial.println(instruction); 
-//  delay(DELAY_TIME); 
-//}
 
 #endif
